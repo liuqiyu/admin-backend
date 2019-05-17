@@ -6,6 +6,7 @@
 module.exports = {
     name: 'admin-backend-development',
     port: 5858,
+    host: 'http://localhost:5858',
 
     /** mysql settings */
     mysql: {

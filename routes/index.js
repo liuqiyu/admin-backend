@@ -1,12 +1,14 @@
 'use strict';
 import createError from 'http-errors';
 import users from './users';
+import upload from './upload';
 
 export default app => {
   /**
    *  自己的路由
    */
   app.use('/users', users);
+  app.use('/upload', upload);
 
 
   // catch 404 and forward to error handler
