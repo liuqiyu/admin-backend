@@ -1,0 +1,17 @@
+发电机：Alternator
+
+变压器：Transformer
+
+服务器：Server
+
+机柜： CabinetPDU
+
+机柜PDU带线槽： CabinetPDUStripGroove
+
+精密： PrecisionAirConditioning
+
+列头柜：ColumnHeadCabinet
+
+配电柜： PowerDistributionCabinet
+
+低压母线：LowVoltageBusBar
