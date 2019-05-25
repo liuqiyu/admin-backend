@@ -11,9 +11,9 @@ const config = configLite(__dirname);
 const router = express.Router();
 
 const createFolder = (folder) =>{
-    try{
+    try {
         fs.accessSync(folder);
-    }catch(e){
+    } catch (e) {
         fs.mkdirSync(folder);
     }
 };
@@ -28,7 +28,7 @@ const storage = multer.diskStorage({
         cb(null, uploadFolder);    // 保存的路径，备注：需要自己创建
     },
     filename: function (req, file, cb) {
-        var extname = path.extname(file.originalname);// 获取文件扩展名
+        const extname = path.extname(file.originalname);// 获取文件扩展名
         // 将保存文件名设置为 字段名 + 时间戳+文件扩展名，比如 logo-1478521468943.jpg
         cb(null, file.fieldname + '-' + Date.now() + extname);
     }
@@ -37,7 +37,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 router.post('/image', upload.array('file', 3), function(req, res, next) {
-    console.log(config)
+    console.log(req.files)
     const data = [];
     for (let i = 0; i < req.files.length; i ++) {
         const path = config.host + req.files[i].path.replace(/\\/g,"\/").replace('public', '');
@@ -46,7 +46,7 @@ router.post('/image', upload.array('file', 3), function(req, res, next) {
             name: req.files[i].filename,
         });
     }
-    console.log(data)
+    // console.log(data)
     return res.send({
         code: 200,
         status: 'success',
