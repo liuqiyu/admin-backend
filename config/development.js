@@ -13,7 +13,7 @@ module.exports = {
         host: 'localhost',
         port: 3306,
         user: 'root',
-        database: 'mysql',
+        database: 'admin_backend',
         password: ''
     },
     debug: true

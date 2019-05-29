@@ -4,13 +4,11 @@ import cookieParser from 'cookie-parser';
 import session from 'express-session';
 import logger from 'morgan';
 import configLite from 'config-lite';
-
-const config = configLite(__dirname);
-
-console.log(config.name);
-console.log(config.port);
-
+import chalk from 'chalk';
+import sessionFileStore from 'session-file-store';
 import router from './routes/index'
+const FileStore = sessionFileStore(session);
+const config = configLite(__dirname);
 
 const app = express();
 
@@ -37,12 +35,14 @@ app.use(express.static(path.join(__dirname, 'public')));
 /**
  * session验证
  */
-app.use(cookieParser('liuqiyu'));
+const secret = 'liuqiyu'
+app.use(cookieParser(secret));
 app.use(session({
-    secret: 'liuqiyu', // 与cookieParser中的一致
+    secret, // 与cookieParser中的一致
     resave: true, // (是否允许)当客户端并行发送多个请求时，其中一个请求在另一个请求结束时对session进行修改覆盖并保存。
     rolling: true, // 强制在每个响应中重设cookie的过期时间，并重新开始计时
     saveUninitialized: true, // 初始化session时是否保存到存储。默认为true， 但是(后续版本)有可能默认失效，所以最好手动添加。
+    store: new FileStore(), // 本地存储session（文本文件，也可以选择其他store，比如redis的）
     cookie: {
         maxAge: 60 * 1000  // 过期时间，单位毫秒
     }
@@ -50,18 +50,21 @@ app.use(session({
 
 /**
  * 资源请求拦截器
- * 用户端若登录状态过期或未登录则自动抛出错误
+ * 用户端若登录状态过期或未登录则自动抛出错误K
  */
-app.use((req, res, next) => {
-    let url = req.originalUrl;
-    req.session.touch();  //刷新session过期时间
-    if (url !== '/login' && !req.session.user) {
-        res.status(401).send('登录状态已过期');
-        return
-    }
-    next();
-});
+// app.use((req, res, next) => {
+//     let url = req.originalUrl;
+//     req.session.touch();  //刷新session过期时间
+//     console.log(url)
+//     if (url !== '/users/login' && !req.session.user) {
+//         res.status(401).send('登录状态已过期');
+//         return
+//     }
+//     next();
+// });
 
 router(app);
+
+console.log(chalk.red(`成功监听端口：${config.port}`))
 
 module.exports = app;
