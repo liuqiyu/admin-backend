@@ -1,8 +1,15 @@
+/**
+ * 登录接口
+ * @param req
+ * @param res
+ * @param next
+ */
 import mysql from './../../utils/mysql';
 
-export const login = (req, res, next) => {
-    const username = req.body.username;
-    const password = req.body.password;
+const login = (req, res, next) => {
+    // const username = req.body.username;
+    // const password = req.body.password;
+    const { username, password } = req.body;
     const sql = "SELECT * FROM user where username = '" + username + "'";
     console.log(sql)
     mysql.query(sql, (err, rows) => {
@@ -16,7 +23,7 @@ export const login = (req, res, next) => {
         }
         if (rows.length > 0) {
             if (rows[0].password == password) {
-                req.session.regenerate(() => {
+                req.session.regenerate((err) => {
                     if(err) {
                         return res.send({
                             code: 500,
@@ -25,6 +32,9 @@ export const login = (req, res, next) => {
                         });
                     }
                     req.session.user = rows[0];
+                    console.log(req.session.sessionID)
+                    console.log(req.session.user)
+                    console.log(req.sessionID)
                     res.send({
                         code: 200,
                         status: 'success',

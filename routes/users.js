@@ -2,8 +2,11 @@
 
 import express from 'express';
 const router = express.Router();
-import Users  from './../controller/users/index';
 
-router.post('/login', Users.login);
+import login from './../controller/users/login'
+import logout from './../controller/users/logout'
+
+router.post('/login', login);
+router.post('/logout', logout);
 
 export default router;
