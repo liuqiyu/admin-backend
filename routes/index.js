@@ -2,6 +2,7 @@
 import createError from 'http-errors';
 import users from './users';
 import upload from './upload';
+import editor from './editor';
 
 export default app => {
   /**
@@ -9,6 +10,7 @@ export default app => {
    */
   app.use('/users', users);
   app.use('/upload', upload);
+  app.use('/editor', editor);
 
 
   // catch 404 and forward to error handler
